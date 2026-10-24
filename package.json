@@ -1,0 +1,13 @@
+{
+  "name": "rs-constructions-3d",
+  "version": "1.0.0",
+  "description": "R.S. Constructions - 3D Architectural Website",
+  "main": "app.js",
+  "scripts": {
+    "start": "python app.py",
+    "build": "echo 'Build succeeded'"
+  },
+  "keywords": ["construction", "threejs", "3d", "architecture"],
+  "author": "R.S. Constructions",
+  "license": "ISC"
+}
