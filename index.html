@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>R.S. CONSTRUCTIONS | Master Builders of Independent Houses &amp; Luxury Apartments</title>
+  
+  <meta name="description" content="R.S. Constructions - Premium 3D architectural showcase for custom independent houses, luxury duplex villas, and multi-storey residential apartments. Spearheaded by Yata Ramchander &amp; Ale Sudeesh.">
+  <meta name="keywords" content="R.S. Constructions, independent houses, luxury duplex villas, residential apartments, house construction, Hyderabad builders, Yata Ramchander, Ale Sudeesh">
+  <meta name="author" content="R.S. Constructions">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23080a0e'/><path d='M7 25V13l9-7 9 7v12H7z' stroke='%23f59e0b' stroke-width='2.2' stroke-linejoin='round' fill='none'/><path d='M13 25v-8h6v8' stroke='%23f8fafc' stroke-width='1.8' fill='none'/></svg>">
+
+  <!-- Editorial Typography: Space Grotesk, Syne & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=Noto+Serif+JP:wght@400;600;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Local Vendored Three.js (Zero external latency, 100% offline reliable) -->
+  <script src="three.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- FIXED 3D WEBGL ARCHITECTURAL CANVAS (KAGE ARCHITECTURE) -->
+  <canvas id="webgl-canvas" class="webgl-viewport" aria-label="Interactive 3D Architectural Scene"></canvas>
+
+  <!-- AMBIENT SCANLINES & VIGNETTE -->
+  <div class="vignette-overlay" aria-hidden="true"></div>
+  <div class="grid-subtle-overlay" aria-hidden="true"></div>
+
+  <!-- 3D INTERACTIVE HUD / VIEWPORT CONTROLLER -->
+  <div class="viewport-hud" id="viewportHud">
+    <div class="hud-left">
+      <div class="hud-chip">
+        <span class="live-dot"></span>
+        <span class="hud-mono">3D ENGINE // WEBGL ARCHITECTURE</span>
+      </div>
+      <div class="hud-views">
+        <button class="hud-btn active" data-view="0" title="Full Masterplan Overview">Overview</button>
+        <button class="hud-btn" data-view="1" title="Independent Luxury Villa">Duplex Villa</button>
+        <button class="hud-btn" data-view="2" title="Multi-Storey Residential Apartment">Apartments</button>
+        <button class="hud-btn" data-view="3" title="Structural Columns &amp; Rebar X-Ray">Structural X-Ray</button>
+      </div>
+    </div>
+
+    <div class="hud-right">
+      <!-- Light Mode Toggle -->
+      <button class="hud-toggle-btn" id="lightModeToggle" title="Toggle Twilight / Night Architectural Illumination">
+        <i data-lucide="moon" class="hud-icon night-icon"></i>
+        <i data-lucide="sun" class="hud-icon day-icon" style="display:none;"></i>
+        <span class="hud-btn-text" id="lightModeLabel">Night Mode</span>
+      </button>
+
+      <!-- 3D Orbit Drag Hint Button -->
+      <button class="hud-toggle-btn" id="orbitModeToggle" title="Click &amp; Drag in 3D to rotate house">
+        <i data-lucide="rotate-3d" class="hud-icon"></i>
+        <span class="hud-btn-text">Drag 3D to Inspect</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAPTER SIDE RAIL (KAGE SIGNATURE PATTERN) -->
+  <nav class="chapter-rail" id="chapterRail" aria-label="Chapter Navigation">
+    <div class="rail-line"></div>
+    <a href="#chap0" class="rail-item active" data-chapter="0" title="00 // Sanctuary Overview">
+      <span class="rail-idx">00</span>
+      <span class="rail-name">The Sanctuary</span>
+    </a>
+    <a href="#chap1" class="rail-item" data-chapter="1" title="01 // Independent Houses &amp; Villas">
+      <span class="rail-idx">01</span>
+      <span class="rail-name">Independent Villas</span>
+    </a>
+    <a href="#chap2" class="rail-item" data-chapter="2" title="02 // Residential Apartments">
+      <span class="rail-idx">02</span>
+      <span class="rail-name">Apartment Towers</span>
+    </a>
+    <a href="#chap3" class="rail-item" data-chapter="3" title="03 // Structural Rigor">
+      <span class="rail-idx">03</span>
+      <span class="rail-name">Structural X-Ray</span>
+    </a>
+    <a href="#chap4" class="rail-item" data-chapter="4" title="04 // Leadership">
+      <span class="rail-idx">04</span>
+      <span class="rail-name">Master Builders</span>
+    </a>
+    <a href="#chap5" class="rail-item" data-chapter="5" title="05 // Estimator &amp; Contact">
+      <span class="rail-idx">05</span>
+      <span class="rail-name">Estimate &amp; Build</span>
+    </a>
+  </nav>
+
+  <!-- TOP EDITORIAL HEADER -->
+  <header class="editorial-header" id="editorialHeader">
+    <div class="header-container">
+      <a href="#chap0" class="brand-unit" aria-label="R.S. Constructions Home">
+        <div class="brand-monogram">
+          <svg viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="6" fill="#10141c" stroke="#f59e0b" stroke-width="1.2"/>
+            <path d="M8 26V13l10-6 10 6v13H8z" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M14 26v-7h8v7" stroke="#ffffff" stroke-width="1.5"/>
+            <circle cx="18" cy="7" r="1.5" fill="#f59e0b"/>
+          </svg>
+        </div>
+        <div class="brand-meta">
+          <span class="brand-name">R.S. CONSTRUCTIONS</span>
+          <span class="brand-tag">INDEPENDENT HOUSES &bull; RESIDENTIAL APARTMENTS</span>
+        </div>
+      </a>
+
+      <!-- Direct Hotline Chips -->
+      <div class="header-hotlines">
+        <a href="tel:9440865895" class="hotline-pill" title="Call Yata Ramchander directly">
+          <span class="pill-dot"></span>
+          <span class="pill-title">Yata Ramchander:</span>
+          <span class="pill-num">+91 94408 65895</span>
+        </a>
+        <a href="tel:9550033661" class="hotline-pill" title="Call Ale Sudeesh directly">
+          <span class="pill-dot"></span>
+          <span class="pill-title">Ale Sudeesh:</span>
+          <span class="pill-num">+91 95500 33661</span>
+        </a>
+      </div>
+
+      <!-- Quick Action CTA -->
+      <div class="header-actions">
+        <a href="#chap5" class="btn btn-amber btn-sm">
+          <span>Calculate Cost</span>
+          <i data-lucide="calculator"></i>
+        </a>
+        <button class="mobile-menu-trigger" id="mobileMenuTrigger" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Overlay -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+      <div class="m-drawer-inner">
+        <div class="m-drawer-head">CHAPTERS</div>
+        <ul class="m-drawer-links">
+          <li><a href="#chap0" class="m-link"><span>00</span> The Sanctuary</a></li>
+          <li><a href="#chap1" class="m-link"><span>01</span> Independent Houses &amp; Villas</a></li>
+          <li><a href="#chap2" class="m-link"><span>02</span> Residential Apartments</a></li>
+          <li><a href="#chap3" class="m-link"><span>03</span> Structural Rigor &amp; Rebar</a></li>
+          <li><a href="#chap4" class="m-link"><span>04</span> Leadership (Yata &amp; Ale)</a></li>
+          <li><a href="#chap5" class="m-link"><span>05</span> Cost Estimator &amp; Contact</a></li>
+        </ul>
+
+        <div class="m-hotline-block">
+          <div class="m-hotline-title">DIRECT CALL ANCHORS</div>
+          <a href="tel:9440865895" class="m-phone-item">
+            <i data-lucide="phone"></i>
+            <div>
+              <div class="m-phone-name">Yata Ramchander</div>
+              <div class="m-phone-val">94408 65895</div>
+            </div>
+          </a>
+          <a href="tel:9550033661" class="m-phone-item">
+            <i data-lucide="phone"></i>
+            <div>
+              <div class="m-phone-name">Ale Sudeesh</div>
+              <div class="m-phone-val">95500 33661</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SCROLLABLE EDITORIAL CONTENT OVERLAY (Z-INDEX 10) -->
+  <div class="editorial-page" id="editorialPage">
+
+    <!-- ============================================================ CHAPTER 00: HERO -->
+    <section class="chapter-sec hero-sec" id="chap0" data-cam-index="0">
+      <div class="content-container">
+        <div class="chapter-eyebrow">
+          <span class="mono-idx">00 // THE SANCTUARY</span>
+          <span class="rule"></span>
+          <span class="jp-sign">邸宅</span>
+        </div>
+
+        <h1 class="display-title">
+          HOMES OF <span class="text-amber">UNSHAKEABLE</span><br>
+          INTEGRITY.
+        </h1>
+
+        <p class="lead-text">
+          We don’t build highways or commercial malls. At <strong>R.S. Constructions</strong>, we specialize exclusively in master-crafted <strong>Independent Houses, Bespoke Duplex Villas, and Multi-Storey Residential Apartments</strong> designed to endure for generations.
+        </p>
+
+        <div class="hero-interactive-badge">
+          <div class="badge-item">
+            <i data-lucide="home" class="icon-amber"></i>
+            <div>
+              <div class="bi-title">Independent Villas</div>
+              <div class="bi-sub">Custom Architecture &bull; Vastu Compliant</div>
+            </div>
+          </div>
+          <div class="badge-divider"></div>
+          <div class="badge-item">
+            <i data-lucide="building" class="icon-amber"></i>
+            <div>
+              <div class="bi-title">Residential Apartments</div>
+              <div class="bi-sub">Multi-Family G+5 &bull; Stilt Parking</div>
+            </div>
+          </div>
+          <div class="badge-divider"></div>
+          <div class="badge-item">
+            <i data-lucide="shield-check" class="icon-amber"></i>
+            <div>
+              <div class="bi-title">Direct Owner Supervision</div>
+              <div class="bi-sub">Yata Ramchander &amp; Ale Sudeesh</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-actions-row">
+          <a href="#chap1" class="btn btn-amber btn-lg">
+            <span>Explore 3D Walkthrough</span>
+            <i data-lucide="arrow-down"></i>
+          </a>
+          <a href="#chap5" class="btn btn-glass btn-lg">
+            <i data-lucide="calculator" class="icon-amber"></i>
+            <span>Calculate House Cost</span>
+          </a>
+          <button class="btn btn-outline btn-lg" onclick="trigger3DInspect()">
+            <i data-lucide="rotate-3d"></i>
+            <span>Inspect 3D Model</span>
+          </button>
+        </div>
+
+        <div class="scroll-prompt">
+          <div class="mouse-scroll-indicator">
+            <span class="wheel"></span>
+          </div>
+          <span class="scroll-sub">SCROLL TO WALK THROUGH THE 3D RESIDENTIAL ESTATE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ CHAPTER 01: INDEPENDENT HOUSES & VILLAS -->
+    <section class="chapter-sec" id="chap1" data-cam-index="1">
+      <div class="content-container">
+        <div class="chapter-eyebrow">
+          <span class="mono-idx">01 // INDEPENDENT HOUSES &amp; DUPLEX VILLAS</span>
+          <span class="rule"></span>
+          <span class="jp-sign">独立住宅</span>
+        </div>
+
+        <div class="editorial-split">
+          <div class="split-col-left">
+            <h2 class="display-heading">
+              YOUR PRIVATE SANCTUARY.<br>
+              <span class="text-amber">CRAFTED TO YOUR SOUL.</span>
+            </h2>
+            <p class="body-p">
+              Every family deserves an independent residence with uninterrupted private skies, bespoke internal courtyards, and zero shared walls. From ground-up structural engineering to the finest Italian marble floor finishes, our villas embody understated contemporary luxury.
+            </p>
+
+            <div class="spec-matrix">
+              <div class="matrix-card">
+                <span class="matrix-num">01</span>
+                <h4>Vastu-Aligned Architectural Harmony</h4>
+                <p>Oriented meticulously for natural sunrise illumination, positive energy flow, and optimal cross-ventilation.</p>
+              </div>
+              <div class="matrix-card">
+                <span class="matrix-num">02</span>
+                <h4>Cantilevered Balconies &amp; Terraces</h4>
+                <p>Post-tensioned beam design allowing sweeping column-free porticos, rooftop pergolas, and private garden decks.</p>
+              </div>
+              <div class="matrix-card">
+                <span class="matrix-num">03</span>
+                <h4>5-Layer Elastomeric Waterproofing</h4>
+                <p>Basements, wet areas, and roof terraces sealed against seepage, weathering, and thermal cracks for 25+ years.</p>
+              </div>
+            </div>
+
+            <div class="direct-callout-panel">
+              <div class="dc-text">
+                <div class="dc-tag">DIRECT BUILDER CONSULTATION</div>
+                <h4>Planning an Independent House or Luxury Villa?</h4>
+                <p>Speak directly with our directors to discuss plot dimensions, architectural elevation, and sanction approvals.</p>
+              </div>
+              <div class="dc-buttons">
+                <a href="tel:9440865895" class="btn btn-outline btn-sm">
+                  <i data-lucide="phone"></i> Call Yata: 9440865895
+                </a>
+                <a href="tel:9550033661" class="btn btn-outline btn-sm">
+                  <i data-lucide="phone"></i> Call Ale: 9550033661
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="split-col-right">
+            <!-- 3D Feature Callout Card -->
+            <div class="architectural-glass-card">
+              <div class="card-head">
+                <span class="card-chip">3D ARCHITECTURAL FOCUS</span>
+                <span class="card-coord">VILLA // ELEVATION 01</span>
+              </div>
+              <h3 class="card-title">Contemporary Duplex Villa Specification</h3>
+              <p class="card-summary">
+                Look into the live 3D viewport behind this card. You are viewing the cantilevered master suite, double-height living foyer, reflecting water garden, and timber-finish rooftop sun pergola.
+              </p>
+
+              <div class="card-specs-list">
+                <div class="spec-line">
+                  <span class="s-k">Average Footprint</span>
+                  <span class="s-v">3,200 &ndash; 7,500 Sq.Ft Built-Up</span>
+                </div>
+                <div class="spec-line">
+                  <span class="s-k">Concrete Standard</span>
+                  <span class="s-v">Certified M30/M35 Ready Mix</span>
+                </div>
+                <div class="spec-line">
+                  <span class="s-k">Steel Reinforcement</span>
+                  <span class="s-v">Fe550D High-Ductility TMT</span>
+                </div>
+                <div class="spec-line">
+                  <span class="s-k">Ceiling Clear Height</span>
+                  <span class="s-v">11 Feet Clear Slab-to-Slab</span>
+                </div>
+                <div class="spec-line">
+                  <span class="s-k">Sanction &amp; Approvals</span>
+                  <span class="s-v">100% Turnkey Cleared by R.S.</span>
+                </div>
+              </div>
+
+              <button class="btn btn-glass btn-block" onclick="focusVillaView()">
+                <i data-lucide="maximize-2"></i>
+                <span>Focus Camera on Villa</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ CHAPTER 02: RESIDENTIAL APARTMENTS -->
+    <section class="chapter-sec" id="chap2" data-cam-index="2">
+      <div class="content-container">
+        <div class="chapter-eyebrow">
+          <span class="mono-idx">02 // MULTI-STOREY RESIDENTIAL APARTMENTS</span>
+          <span class="rule"></span>
+          <span class="jp-sign">集合住宅</span>
+        </div>
+
+        <div class="editorial-split">
+          <div class="split-col-left">
+            <h2 class="display-heading">
+              COMMUNITY ELEVATED.<br>
+              <span class="text-amber">MODERN RESIDENTIAL TOWERS.</span>
+            </h2>
+            <p class="body-p">
+              For land owners, joint venture partners, and families seeking refined apartment living, R.S. Constructions engineers G+5 and multi-tier residential complexes with earthquake-resistant shear walls and premium acoustic privacy.
+            </p>
+
+            <div class="spec-matrix">
+              <div class="matrix-card">
+                <span class="matrix-num">01</span>
+                <h4>Stilt &amp; Basement Parking Engineering</h4>
+                <p>Heavy reinforced concrete pilotis and columns designed for wide vehicular turning radii and EV charger provisioning.</p>
+              </div>
+              <div class="matrix-card">
+                <span class="matrix-num">02</span>
+                <h4>Sound &amp; Thermal Privacy Barriers</h4>
+                <p>Acoustic insulation between floor slabs and autoclaved aerated concrete (AAC) blocks keeping apartments quiet and energy-cool.</p>
+              </div>
+              <div class="matrix-card">
+                <span class="matrix-num">03</span>
+                <h4>Rooftop Amenities &amp; Green Energy</h4>
+                <p>Rooftop leisure pavilion, rainwater harvesting chambers, and solar energy hookups for common utility savings.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="split-col-right">
+            <div class="architectural-glass-card">
+              <div class="card-head">
+                <span class="card-chip">3D ARCHITECTURAL FOCUS</span>
+                <span class="card-coord">TOWER // APARTMENTS G+5</span>
+              </div>
+              <h3 class="card-title">Residential Apartment Complex Model</h3>
+              <p class="card-summary">
+                The 3D camera tilts upward to frame the multi-storey residential block. Each floor features staggered private balconies, vertical concrete architectural fins, and warm glowing interior living spaces.
+              </p>
+
+              <div class="card-specs-list">
+                <div class="spec-line">
+                  <span class="s-k">Configuration</span>
+                  <span class="s-v">2 BHK, 3 BHK &amp; Penthouse Units</span>
+                </div>
+                <div class="spec-line">
+                  <span class="s-k">Elevator Infrastructure</span>
+                  <span class="s-v">High-Speed ARD Automatic Lifts</span>
+                </div>
+                <div class="spec-line">
+                  <span class="s-k">Safety Standard</span>
+                  <span class="s-v">Seismic Zone II/III Strict Compliance</span>
+                </div>
+                <div class="spec-line">
+                  <span class="s-k">Water Infrastructure</span>
+                  <span class="s-v">Dual Overhead &amp; Sump Tank System</span>
+                </div>
+              </div>
+
+              <button class="btn btn-glass btn-block" onclick="focusApartmentView()">
+                <i data-lucide="maximize-2"></i>
+                <span>Focus Camera on Apartments</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ CHAPTER 03: STRUCTURAL RIGOR & REBAR X-RAY -->
+    <section class="chapter-sec" id="chap3" data-cam-index="3">
+      <div class="content-container">
+        <div class="chapter-eyebrow">
+          <span class="mono-idx">03 // STRUCTURAL RIGOR &amp; FOUNDATIONS</span>
+          <span class="rule"></span>
+          <span class="jp-sign">構造耐力</span>
+        </div>
+
+        <div class="editorial-split">
+          <div class="split-col-left">
+            <h2 class="display-heading">
+              WHAT YOU DON’T SEE<br>
+              <span class="text-amber">MAKES IT STAND FOREVER.</span>
+            </h2>
+            <p class="body-p">
+              Finishing is easy; structural perfection is rare. At R.S. Constructions, our obsession starts 15 feet below the topsoil with deep foundation footings, continuous grade-beam tying, and dense rebar steel cage detailing.
+            </p>
+
+            <div class="spec-matrix">
+              <div class="matrix-card">
+                <span class="matrix-num">01</span>
+                <h4>Fe550D Grade Steel Exclusively</h4>
+                <p>We mandate high-ductility TMT steel bars (TATA Tiscon / SAIL / JSW) with certified tensile testing for supreme earthquake flexibility.</p>
+              </div>
+              <div class="matrix-card">
+                <span class="matrix-num">02</span>
+                <h4>Machine-Vibrated Concrete Compaction</h4>
+                <p>Zero honeycombing. Every column and slab pour is compacted with needle vibrators to achieve 100% density and impermeable strength.</p>
+              </div>
+              <div class="matrix-card">
+                <span class="matrix-num">03</span>
+                <h4>14-Milestone Quality Sign-Offs</h4>
+                <p>From soil bearing capacity tests to 7, 14, and 28-day concrete cube compressive tests, every milestone is signed off by our directors.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="split-col-right">
+            <div class="architectural-glass-card xray-theme-card">
+              <div class="card-head">
+                <span class="card-chip xray-chip">STRUCTURAL X-RAY ENGAGED</span>
+                <span class="card-coord">BEAMS &bull; COLUMNS &bull; FOOTINGS</span>
+              </div>
+              <h3 class="card-title">Live 3D Structural Rebar Framework</h3>
+              <p class="card-summary">
+                Notice how the 3D scene renders the architectural columns, grade beams, and glowing amber rebar reinforcement lines. This structural skeleton is the backbone of every home we build.
+              </p>
+
+              <div class="xray-stat-grid">
+                <div class="x-stat">
+                  <div class="x-val">100%</div>
+                  <div class="x-lbl">Grade-A Certified Steel</div>
+                </div>
+                <div class="x-stat">
+                  <div class="x-val">M35</div>
+                  <div class="x-lbl">Minimum Column Grade</div>
+                </div>
+                <div class="x-stat">
+                  <div class="x-val">0%</div>
+                  <div class="x-lbl">Tolerance For Defects</div>
+                </div>
+                <div class="x-stat">
+                  <div class="x-val">10 Yrs</div>
+                  <div class="x-lbl">Structural Warranty</div>
+                </div>
+              </div>
+
+              <button class="btn btn-amber btn-block" onclick="toggleXrayMode()">
+                <i data-lucide="eye"></i>
+                <span id="xrayBtnLabel">Toggle X-Ray Transparency</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ CHAPTER 04: EXECUTIVE LEADERSHIP -->
+    <section class="chapter-sec" id="chap4" data-cam-index="4">
+      <div class="content-container">
+        <div class="chapter-eyebrow">
+          <span class="mono-idx">04 // EXECUTIVE LEADERSHIP &amp; GOVERNANCE</span>
+          <span class="rule"></span>
+          <span class="jp-sign">棟梁</span>
+        </div>
+
+        <div class="section-title-wrap text-center">
+          <h2 class="display-heading">
+            SPEARHEADED BY <span class="text-amber">MASTER BUILDERS</span>
+          </h2>
+          <p class="lead-text max-width-lead">
+            No middle managers. No disconnected corporate offices. R.S. Constructions is owned and personally led on-site by two seasoned engineering directors with over 25 years of civil pedigree.
+          </p>
+        </div>
+
+        <div class="leaders-editorial-grid">
+          <!-- Leader 1: Yata Ramchander -->
+          <div class="leader-editorial-card">
+            <div class="l-card-header">
+              <div class="l-avatar">
+                <span>YR</span>
+              </div>
+              <div class="l-role-tag">OWNER &bull; DIRECTOR</div>
+            </div>
+
+            <h3 class="l-name">Yata Ramchander</h3>
+            <div class="l-title">Owner &amp; Managing Director</div>
+
+            <p class="l-bio">
+              With over 25 years in civil construction and turnkey residential execution, Yata Ramchander anchors our firm’s commitment to quality materials and client trust. He personally oversees structural foundation pours, municipal approvals, and customer handover transparency.
+            </p>
+
+            <div class="l-strengths">
+              <div class="strength-item"><i data-lucide="check"></i> 25+ Years Hands-On Civil Construction</div>
+              <div class="strength-item"><i data-lucide="check"></i> 150+ Independent Homes &amp; Flats Handed Over</div>
+              <div class="strength-item"><i data-lucide="check"></i> Mastery in Soil Mechanics &amp; Foundation Systems</div>
+            </div>
+
+            <div class="l-contact-box">
+              <div class="cb-label">DIRECT PHONE ANCHOR</div>
+              <a href="tel:9440865895" class="l-phone-link">
+                <i data-lucide="phone-call"></i>
+                <span>+91 94408 65895</span>
+              </a>
+              <a href="https://wa.me/919440865895?text=Hello%20Yata%20Ramchander%20Sir,%20I%20would%20like%20to%20discuss%20building%20an%20independent%20house/apartment%20with%20R.S.%20Constructions." target="_blank" rel="noopener noreferrer" class="l-whatsapp-link">
+                <i data-lucide="message-square"></i> WhatsApp Direct
+              </a>
+            </div>
+          </div>
+
+          <!-- Leader 2: Ale Sudeesh -->
+          <div class="leader-editorial-card">
+            <div class="l-card-header">
+              <div class="l-avatar">
+                <span>AS</span>
+              </div>
+              <div class="l-role-tag">OWNER &bull; DIRECTOR</div>
+            </div>
+
+            <h3 class="l-name">Ale Sudeesh</h3>
+            <div class="l-title">Owner &amp; Executive Director</div>
+
+            <p class="l-bio">
+              A dynamic structural planner and site execution authority, Ale Sudeesh drives modern construction methodologies, high-precision concrete formulation, and project scheduling. His rigorous engineering standards guarantee zero tolerance for structural flaws.
+            </p>
+
+            <div class="l-strengths">
+              <div class="strength-item"><i data-lucide="check"></i> Multi-Storey Residential Structural Systems</div>
+              <div class="strength-item"><i data-lucide="check"></i> Precision Concrete &amp; Rebar Quality Control</div>
+              <div class="strength-item"><i data-lucide="check"></i> Guaranteed Milestone Schedule Delivery</div>
+            </div>
+
+            <div class="l-contact-box">
+              <div class="cb-label">DIRECT PHONE ANCHOR</div>
+              <a href="tel:9550033661" class="l-phone-link">
+                <i data-lucide="phone-call"></i>
+                <span>+91 95500 33661</span>
+              </a>
+              <a href="https://wa.me/919550033661?text=Hello%20Ale%20Sudeesh%20Sir,%20I%20would%20like%20to%20discuss%20building%20an%20independent%20house/apartment%20with%20R.S.%20Constructions." target="_blank" rel="noopener noreferrer" class="l-whatsapp-link">
+                <i data-lucide="message-square"></i> WhatsApp Direct
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ CHAPTER 05: ESTIMATOR & CONTACT -->
+    <section class="chapter-sec" id="chap5" data-cam-index="5">
+      <div class="content-container">
+        <div class="chapter-eyebrow">
+          <span class="mono-idx">05 // ESTIMATE &amp; BUILD</span>
+          <span class="rule"></span>
+          <span class="jp-sign">計画</span>
+        </div>
+
+        <div class="section-title-wrap text-center">
+          <h2 class="display-heading">
+            ESTIMATE YOUR <span class="text-amber">RESIDENTIAL</span> INVESTMENT
+          </h2>
+          <p class="lead-text max-width-lead">
+            Configure your dream independent villa or residential apartment scope below for real-time indicative budget ranges and material metrics.
+          </p>
+        </div>
+
+        <div class="estimator-and-contact-wrapper">
+          <!-- Left: Estimator Machine -->
+          <div class="calc-panel">
+            <div class="calc-head">
+              <span class="c-tag">INTERACTIVE RESIDENTIAL CALCULATOR</span>
+              <span class="c-live"><span class="dot"></span> LIVE COMPUTE</span>
+            </div>
+
+            <!-- 1. Type -->
+            <div class="input-block">
+              <label class="block-label">1. Residential Structure Type</label>
+              <div class="type-btn-grid" id="structureTypeGrid">
+                <button class="t-btn active" data-type="villa">
+                  <i data-lucide="home"></i>
+                  <span>Independent Villa (G+1/G+2)</span>
+                </button>
+                <button class="t-btn" data-type="apartment">
+                  <i data-lucide="building"></i>
+                  <span>Apartment Complex (G+4/G+5)</span>
+                </button>
+                <button class="t-btn" data-type="duplex">
+                  <i data-lucide="layers"></i>
+                  <span>Luxury Triplex / Penthouse</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. Area Slider -->
+            <div class="input-block">
+              <div class="slider-head">
+                <label class="block-label" for="resAreaSlider">2. Total Built-Up Footprint</label>
+                <div class="slider-val-box">
+                  <span id="sliderAreaVal">3,500</span> <span class="u">Sq.Ft</span>
+                </div>
+              </div>
+              <input type="range" id="resAreaSlider" min="1200" max="25000" step="100" value="3500" class="range-slider">
+              <div class="slider-ticks-row">
+                <span>1,200 sq.ft</span>
+                <span>5,000 sq.ft</span>
+                <span>12,000 sq.ft</span>
+                <span>25,000+ sq.ft</span>
+              </div>
+            </div>
+
+            <!-- 3. Finish Grade -->
+            <div class="input-block">
+              <label class="block-label">3. Specifications &amp; Material Grade</label>
+              <div class="spec-grades-row" id="gradeRow">
+                <div class="grade-item" data-grade="standard">
+                  <div class="g-name">Executive Grade</div>
+                  <div class="g-desc">Fe500D steel, M25 concrete, premium vitrified tiles, Kohler/Jaquar fittings.</div>
+                  <div class="g-cost">&#8377;2,100 - &#8377;2,400 / sq.ft</div>
+                </div>
+                <div class="grade-item active" data-grade="premium">
+                  <div class="g-badge">POPULAR</div>
+                  <div class="g-name">Luxury Contemporary</div>
+                  <div class="g-desc">Fe550D TMT, M35 design mix, Italian marble, UPVC double-glazing, smart automation.</div>
+                  <div class="g-cost">&#8377;2,650 - &#8377;3,100 / sq.ft</div>
+                </div>
+                <div class="grade-item" data-grade="ultra">
+                  <div class="g-name">Bespoke Ultra-Luxury</div>
+                  <div class="g-desc">Architectural cantilevered structural design, imported cladding, private lift, infinity deck.</div>
+                  <div class="g-cost">&#8377;3,400 - &#8377;4,200+ / sq.ft</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Output Summary Card -->
+            <div class="calc-output-card">
+              <div class="out-label">Estimated Turnkey Budget Range</div>
+              <div class="out-budget" id="outBudget">&#8377;92.75 L - &#8377;1.08 Cr</div>
+              <div class="out-sub">Includes deep foundation, superstructure, brickwork, MEP, and luxury finishing</div>
+
+              <div class="out-metrics-grid">
+                <div class="om-item">
+                  <i data-lucide="clock" class="icon-amber"></i>
+                  <div>
+                    <div class="om-val" id="outDuration">9 - 12 Months</div>
+                    <div class="om-lbl">Estimated Timeline</div>
+                  </div>
+                </div>
+                <div class="om-item">
+                  <i data-lucide="layers" class="icon-amber"></i>
+                  <div>
+                    <div class="om-val" id="outSteel">~16.8 Metric Tons</div>
+                    <div class="om-lbl">Fe550D Steel Required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Direct Consultation Form -->
+          <div class="contact-panel">
+            <div class="cp-head">
+              <h3 class="cp-title">Request Official Blueprint &amp; Quote</h3>
+              <p class="cp-sub">Your project parameters will be directly reviewed by <strong>Yata Ramchander</strong> and <strong>Ale Sudeesh</strong>.</p>
+            </div>
+
+            <form id="residentialContactForm" novalidate>
+              <div class="f-group">
+                <label for="cName">Your Full Name <span class="req">*</span></label>
+                <input type="text" id="cName" class="f-input" placeholder="e.g. Ramesh Chandra" required>
+                <span class="f-error" id="nameError"></span>
+              </div>
+
+              <div class="f-row">
+                <div class="f-group">
+                  <label for="cPhone">Phone Number <span class="req">*</span></label>
+                  <input type="tel" id="cPhone" class="f-input" placeholder="e.g. 9876543210" required>
+                  <span class="f-error" id="phoneError"></span>
+                </div>
+                <div class="f-group">
+                  <label for="cEmail">Email Address <span class="req">*</span></label>
+                  <input type="email" id="cEmail" class="f-input" placeholder="e.g. ramesh@gmail.com" required>
+                  <span class="f-error" id="emailError"></span>
+                </div>
+              </div>
+
+              <div class="f-row">
+                <div class="f-group">
+                  <label for="cPlotArea">Plot Size / Dimensions</label>
+                  <input type="text" id="cPlotArea" class="f-input" placeholder="e.g. 40x60 or 300 Sq. Yards">
+                </div>
+                <div class="f-group">
+                  <label for="cDirectorPref">Review Preference</label>
+                  <select id="cDirectorPref" class="f-input f-select">
+                    <option value="Both Owners">Both Directors (General Review)</option>
+                    <option value="Yata Ramchander">Yata Ramchander (Managing Director)</option>
+                    <option value="Ale Sudeesh">Ale Sudeesh (Executive Director)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="f-group">
+                <label for="cMessage">Project Requirements &amp; Location <span class="req">*</span></label>
+                <textarea id="cMessage" rows="4" class="f-input f-textarea" placeholder="Tell us about the plot location (e.g. Hyderabad / Rangareddy), expected floors (G+1 / G+2), and when you plan to start construction..." required></textarea>
+                <span class="f-error" id="messageError"></span>
+              </div>
+
+              <button type="submit" class="btn btn-amber btn-block" id="formSubmitBtn">
+                <span class="btn-text">Submit for Director Review</span>
+                <i data-lucide="send" class="btn-ico"></i>
+                <span class="spinner" style="display:none;"></span>
+              </button>
+
+              <div class="form-privacy-note">
+                <i data-lucide="lock" class="icon-amber"></i>
+                <span>Direct owner confidentiality. Your number is never shared with third parties.</span>
+              </div>
+            </form>
+
+            <div class="form-success-banner" id="formSuccessBanner" style="display:none;">
+              <i data-lucide="check-circle-2" class="success-ico"></i>
+              <div>
+                <h4>Inquiry Successfully Received!</h4>
+                <p>Thank you for reaching out to R.S. Constructions. Our directors will review your plot parameters and call you within 2 business hours.</p>
+                <div class="quick-call-row">
+                  <span>Call immediately:</span>
+                  <a href="tel:9440865895" class="qc-link">+91 94408 65895</a> or 
+                  <a href="tel:9550033661" class="qc-link">+91 95500 33661</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ FOOTER / COLOPHON -->
+    <footer class="editorial-footer">
+      <div class="content-container">
+        <div class="foot-top-row">
+          <div class="foot-brand-box">
+            <div class="brand-monogram">
+              <svg viewBox="0 0 36 36" fill="none">
+                <rect width="36" height="36" rx="6" fill="#10141c" stroke="#f59e0b" stroke-width="1.2"/>
+                <path d="M8 26V13l10-6 10 6v13H8z" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M14 26v-7h8v7" stroke="#ffffff" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div>
+              <div class="f-title">R.S. CONSTRUCTIONS</div>
+              <div class="f-sub">MASTER BUILDERS OF INDEPENDENT HOUSES &amp; RESIDENTIAL APARTMENTS</div>
+            </div>
+          </div>
+
+          <!-- Direct Phone Anchors in Footer -->
+          <div class="foot-hotlines-box">
+            <div class="fh-item">
+              <div class="fh-role">Owner &amp; Director</div>
+              <div class="fh-name">Yata Ramchander</div>
+              <a href="tel:9440865895" class="fh-phone"><i data-lucide="phone"></i> +91 94408 65895</a>
+            </div>
+            <div class="fh-item">
+              <div class="fh-role">Owner &amp; Director</div>
+              <div class="fh-name">Ale Sudeesh</div>
+              <a href="tel:9550033661" class="fh-phone"><i data-lucide="phone"></i> +91 95500 33661</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot-bottom-row">
+          <div class="f-copy">&copy; <span id="footYear">2026</span> R.S. Constructions. All rights reserved.</div>
+          <div class="f-specs">
+            <span>ISO 9001:2015 Civil Certified</span>
+            <span class="sep">&bull;</span>
+            <span>Vastu-Aligned Engineering</span>
+            <span class="sep">&bull;</span>
+            <span>WebGL 3D Architecture</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /.editorial-page -->
+
+  <!-- FLOATING QUICK DIAL ACTION BAR -->
+  <div class="floating-quick-dial">
+    <div class="speed-dial-expanded" id="speedDialExpanded">
+      <a href="tel:9440865895" class="sd-item">
+        <span class="sd-label">Call Yata Ramchander (9440865895)</span>
+        <div class="sd-icon"><i data-lucide="phone"></i></div>
+      </a>
+      <a href="tel:9550033661" class="sd-item">
+        <span class="sd-label">Call Ale Sudeesh (9550033661)</span>
+        <div class="sd-icon"><i data-lucide="phone"></i></div>
+      </a>
+      <a href="https://wa.me/919440865895?text=Hello%20R.S.%20Constructions,%20I%20would%20like%20to%20discuss%20building%20a%20house." target="_blank" rel="noopener noreferrer" class="sd-item">
+        <span class="sd-label">WhatsApp Direct</span>
+        <div class="sd-icon sd-wa"><i data-lucide="message-square"></i></div>
+      </a>
+      <a href="#chap5" class="sd-item">
+        <span class="sd-label">Cost Estimator</span>
+        <div class="sd-icon"><i data-lucide="calculator"></i></div>
+      </a>
+    </div>
+
+    <button class="sd-main-trigger" id="speedDialTrigger" aria-label="Toggle Quick Direct Call Menu">
+      <i data-lucide="phone-call" class="ico-open"></i>
+      <i data-lucide="x" class="ico-close"></i>
+    </button>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-hub" id="toastHub" aria-live="polite"></div>
+
+  <!-- APPLICATION CODE -->
+  <script src="app.js"></script>
+</body>
+</html>
